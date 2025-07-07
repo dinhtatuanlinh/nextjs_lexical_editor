@@ -1,21 +1,58 @@
-@import "tailwindcss";
-:root {
-    --background: #ffffff;
-    --foreground: #171717;
-}
-
-body {
-    background: var(--background);
-    color: var(--foreground);
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-.editor-container ul {
-    list-style-type: disc !important;
-    padding-left: 1.5rem !important;
-}
-
-.editor-container ol {
-    list-style-type: decimal !important;
-    padding-left: 1.5rem !important;
-}
+        @import "tailwindcss";
+         :root {
+            --background: #ffffff;
+            --foreground: #171717;
+        }
+        
+        body {
+            background: var(--background);
+            color: var(--foreground);
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        
+        .editor-container ul {
+            list-style-type: disc !important;
+            padding-left: 1.5rem !important;
+        }
+        
+        .editor-container ol {
+            list-style-type: decimal !important;
+            padding-left: 1.5rem !important;
+        }
+        
+        .my-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        .my-cell {
+            border: 1px solid #ccc;
+            padding: 8px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+        }
+        
+        table td,
+        table th {
+            border: 1px solid #ccc;
+            padding: 8px;
+            min-width: 80px;
+        }
+        
+        a {
+            color: blue;
+            text-decoration: underline;
+        }
+        
+        .editor-code {
+            background-color: #2e3440;
+            color: #d8dee9;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre;
+        }
