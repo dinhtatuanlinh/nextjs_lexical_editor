@@ -1,6 +1,6 @@
 'use client';
 import { ParagraphNode } from 'lexical';
-import { createContext, memo, useMemo, useState } from 'react';
+import { createContext, memo, useImperativeHandle, useMemo, useState } from 'react';
 
 import { LinkNode } from '@lexical/link';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
@@ -18,6 +18,13 @@ import { ImageNode } from './nodes/imageNode';
 import ImagePlugin from './plugins/imagePlugin';
 import { FlexRowNode } from './nodes/flexRowNode';
 import FloatingTextFormatToolbarPlugin from './plugins/floatingMenuPlugin';
+import { StyledBlockNode } from './nodes/styledBlockNode';
+import './editor.css';
+import StyledBlockPlugin from './plugins/styleBlockPlugin';
+import { StyledBlockBehaviourPlugin } from './plugins/styledBlockBehaviourPlugin';
+import { LexicalEditor as LexicalEditorInstance } from 'lexical';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import EditorRefPlugin from './plugins/EditorRefPlugin';
 
 // Catch any errors that occur during Lexical updates and log them
 // or throw them as needed. If you don't throw them, Lexical will
@@ -40,6 +47,7 @@ interface LexicalProps<
 	onChange: (content: string) => void;
 	handleGetImages: (pageNumber: number) => Promise<R>;
 	handleUploadImage: (file: File, fileName: string) => Promise<void>;
+	initialContent?: string;
 }
 
 function LexicalEditor<
@@ -50,7 +58,9 @@ function LexicalEditor<
 	onChange,
 	handleGetImages,
 	handleUploadImage,
-}: LexicalProps<T, R>) {
+	ref,
+	initialContent,
+}: LexicalProps<T, R> & { ref: React.Ref<LexicalEditorInstance | null> }) {
 	const [lastClickedImageKey, setLastClickedImageKey] = useState< string | null >(null);
 	const initialConfig = {
 		namespace: 'MyEditor',
@@ -58,7 +68,8 @@ function LexicalEditor<
 		onError: (e: any) => {
 			console.log('ERROR:', e);
 		},
-		nodes: [HeadingNode, ParagraphNode, LinkNode, ImageNode, FlexRowNode],
+		nodes: [HeadingNode, ParagraphNode, LinkNode, ImageNode, FlexRowNode, StyledBlockNode],
+		editorState: initialContent,
 	};
 
 	const CustomPlaceholder = useMemo(() => {
@@ -78,6 +89,7 @@ function LexicalEditor<
 	const handleEditorChange = (content: string) => {
 		onChange(content);
 	};
+
 
 	return (
 		<div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-4 h-[50vh] relative">
@@ -106,6 +118,9 @@ function LexicalEditor<
 					<ImagePlugin />
 					<AutoFocusPlugin />
 					<FloatingTextFormatToolbarPlugin />
+					<StyledBlockPlugin />
+					<StyledBlockBehaviourPlugin />
+					<EditorRefPlugin refObject={ref} />
 				</LexicalComposer>
 			</ImageNodeClickContext.Provider>
 		</div>

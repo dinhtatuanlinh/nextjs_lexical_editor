@@ -47,6 +47,7 @@ import ImageManager from '../components/imageManager';
 import { ImageNodeClickContext } from '../lexicalEditor';
 import { $createImageNode, ImageNode } from '../nodes/imageNode';
 import { $createFlexRowNode } from '../nodes/flexRowNode';
+import { INSERT_STYLED_BLOCK_COMMAND } from '../commands/insertStyledBlock';
 
 export default function ToolbarPlugin<
 	T extends { imageId: number; name: string; link: string; type: string },
@@ -317,6 +318,12 @@ export default function ToolbarPlugin<
 			}
 		});
 	};
+
+	const insertBlueBox = () => {
+		editor.dispatchCommand(INSERT_STYLED_BLOCK_COMMAND, {
+		  className: 'blue-box',        // choose anything
+		});
+	  };
 
 	return (
 		<div className="flex flex-wrap gap-2 border-b p-2 bg-gray-100 sticky top-0 z-30">
@@ -621,6 +628,9 @@ export default function ToolbarPlugin<
 				>
 					Insert Flex Row Block
 				</button>
+			</div>
+			<div className="flex space-x-1 border-r pr-2">
+				<button onClick={insertBlueBox}>Blue Box</button>
 			</div>
 
 			<ImageManager<T, R>

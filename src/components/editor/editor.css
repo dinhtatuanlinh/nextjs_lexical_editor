@@ -1,0 +1,16 @@
+/* editor.css */
+
+.blue-box {
+    background: #e0f2ff;
+    border: 2px dashed #0284c7;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+}
+
+
+/* option: generic style all styled-blocks */
+
+div[data-lexical-node="styled-block"] {
+    min-height: 40px;
+}
