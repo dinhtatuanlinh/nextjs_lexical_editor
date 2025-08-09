@@ -5,29 +5,7 @@ import axios, { AxiosError } from 'axios';
 import { useState, useRef } from 'react';
 import { LexicalEditor as LexicalEditorInstance } from 'lexical';
 
-const initialContent = `
-{
-  "root": {
-    "children": [
-      {
-        "children": [],
-        "direction": null,
-        "format": "",
-        "indent": 0,
-        "type": "paragraph",
-        "version": 1,
-        "textFormat": 0,
-        "textStyle": ""
-      }
-    ],
-    "direction": null,
-    "format": "",
-    "indent": 0,
-    "type": "root",
-    "version": 1
-  }
-}
-`;
+const initialContent = undefined
 
 export default function HomePage() {
 	const [content, setContent] = useState('');

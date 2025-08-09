@@ -14,17 +14,13 @@ import {
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import CodeIcon from '@mui/icons-material/Code';
-import FormatBoldOutlinedIcon from '@mui/icons-material/FormatBoldOutlined';
-import FormatItalicOutlinedIcon from '@mui/icons-material/FormatItalicOutlined';
-import FormatUnderlinedOutlinedIcon from '@mui/icons-material/FormatUnderlinedOutlined';
-import InsertLinkOutlinedIcon from '@mui/icons-material/InsertLinkOutlined';
-import StrikethroughSOutlinedIcon from '@mui/icons-material/StrikethroughSOutlined';
-
-import { Box, IconButton, styled } from '@mui/material';
+import { Box, styled } from '@mui/material';
 import { getDOMRangeRect } from '../common/utils/getDOMRangeRect';
 import { getSelectedNode } from '../common/utils/getSelectNode';
 import { setFloatingElemPosition } from '../common/utils/setFloatingElemPosition';
+import { HiLink, HiLinkSlash } from 'react-icons/hi2';
+import { MdFormatBold, MdFormatItalic, MdFormatUnderlined } from 'react-icons/md';
+import { BsCodeSlash, BsTypeStrikethrough } from 'react-icons/bs';
 
 export const FloatingDivContainer = styled(Box)({
 	display: 'flex',
@@ -55,6 +51,8 @@ function TextFormatFloatingToolbar({
 	isStrikethrough,
 	isSubscript,
 	isSuperscript,
+	showInput,
+	setShowInput,
 }: {
 	editor: LexicalEditor;
 	anchorElem: HTMLElement;
@@ -66,7 +64,10 @@ function TextFormatFloatingToolbar({
 	isStrikethrough: boolean;
 	isSubscript: boolean;
 	isSuperscript: boolean;
+	showInput: boolean;
+	setShowInput: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+	const [url, setUrl] = useState('');
 	const popupCharStylesEditorRef = useRef<HTMLDivElement>(null);
 
 	const insertLink = useCallback(() => {
@@ -175,70 +176,131 @@ function TextFormatFloatingToolbar({
 		);
 	}, [editor, updateTextFormatFloatingToolbar]);
 
+	const handleInsertLink = () => {
+		editor.update(() => {
+			const selection = $getSelection();
+			if ($isRangeSelection(selection)) {
+				editor.dispatchCommand(TOGGLE_LINK_COMMAND, url);
+			}
+		});
+		setShowInput(false);
+		setUrl('');
+	};
+	const handleRemoveLink = () => {
+		editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
+	};
+
 	return (
 		<FloatingDivContainer ref={popupCharStylesEditorRef}>
 			{editor.isEditable() && (
 				<>
-					<IconButton
+					<button
+						type="button"
 						onClick={() => {
 							editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold');
 						}}
-						color={isBold ? 'secondary' : undefined}
+						className={`${
+							isBold ? 'bg-blue-200' : 'hover:bg-gray-200'
+						} px-2 py-1 rounded text-black font-semibold`}
 					>
-						<FormatBoldOutlinedIcon />
-					</IconButton>
+						<MdFormatBold />
+					</button>
 
-					<IconButton
+					<button
+						type="button"
 						onClick={() => {
 							editor.dispatchCommand(
 								FORMAT_TEXT_COMMAND,
 								'italic'
 							);
 						}}
-						color={isItalic ? 'secondary' : undefined}
+						className={`${
+							isItalic ? 'bg-blue-200' : 'hover:bg-gray-200'
+						} px-2 py-1 rounded text-black italic`}
 					>
-						<FormatItalicOutlinedIcon />
-					</IconButton>
+						<MdFormatItalic />
+					</button>
 
-					<IconButton
+					<button
+						type="button"
 						onClick={() => {
 							editor.dispatchCommand(
 								FORMAT_TEXT_COMMAND,
 								'underline'
 							);
 						}}
-						color={isUnderline ? 'secondary' : undefined}
+						className={`${
+							isUnderline ? 'bg-blue-200' : 'hover:bg-gray-200'
+						} px-2 py-1 rounded text-black underline`}
 					>
-						<FormatUnderlinedOutlinedIcon />
-					</IconButton>
+						<MdFormatUnderlined />
+					</button>
 
-					<IconButton
+					<button
+						type="button"
 						onClick={() => {
 							editor.dispatchCommand(
 								FORMAT_TEXT_COMMAND,
 								'strikethrough'
 							);
 						}}
-						color={isStrikethrough ? 'secondary' : undefined}
+						className={`${
+							isStrikethrough ? 'bg-blue-200' : 'hover:bg-gray-200'
+						} px-2 py-1 rounded text-black`}
 					>
-						<StrikethroughSOutlinedIcon />
-					</IconButton>
+						<BsTypeStrikethrough />
+					</button>
 
-					<IconButton
+					<button
+						type="button"
 						onClick={() => {
 							editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'code');
 						}}
-						color={isCode ? 'secondary' : undefined}
+						className={`${
+							isCode ? 'bg-blue-200' : 'hover:bg-gray-200'
+						} px-2 py-1 rounded text-black`}
 					>
-						<CodeIcon />
-					</IconButton>
+						<BsCodeSlash />
+					</button>
 
-					<IconButton
+					{/* <IconButton
 						onClick={insertLink}
 						color={isLink ? 'secondary' : undefined}
 					>
 						<InsertLinkOutlinedIcon />
-					</IconButton>
+					</IconButton> */}
+					<button
+						type="button"
+						onClick={() => setShowInput((prev) => !prev)}
+						className="rounded px-2 py-1 text-sm hover:bg-gray-200"
+					>
+						<HiLink />
+					</button>
+					{showInput && (
+						<>
+							<input
+								className="border px-2 py-1 text-sm rounded"
+								type="text"
+								placeholder="https://example.com"
+								value={url}
+								onChange={(e) => setUrl(e.target.value)}
+							/>
+							<button
+								type="button"
+								onClick={handleInsertLink}
+								className="px-2 py-1 rounded text-sm hover:bg-gray-200"
+							>
+								ok
+							</button>
+						</>
+					)}
+					<button
+						type="button"
+						onClick={handleRemoveLink}
+						className="px-2 py-1 rounded text-sm hover:bg-gray-200"
+					>
+						<HiLinkSlash />
+					</button>
 				</>
 			)}
 		</FloatingDivContainer>
@@ -256,6 +318,7 @@ function useFloatingTextFormatToolbar(editor: LexicalEditor) {
 	const [isSuperscript, setIsSuperscript] = useState(false);
 	const [isCode, setIsCode] = useState(false);
 	const [isMounted, setIsMounted] = useState(false);
+	const [showInput, setShowInput] = useState(false);
 
 	const updatePopup = useCallback(() => {
 		editor.getEditorState().read(() => {
@@ -343,7 +406,7 @@ function useFloatingTextFormatToolbar(editor: LexicalEditor) {
 		setIsMounted(true);
 	}, []);
 
-	if (!isMounted || !isText || isLink) {
+	if (!isMounted || (!isText && !showInput)) {
 		return null;
 	}
 
@@ -359,6 +422,8 @@ function useFloatingTextFormatToolbar(editor: LexicalEditor) {
 			isSuperscript={isSuperscript}
 			isUnderline={isUnderline}
 			isCode={isCode}
+			showInput={showInput}
+			setShowInput={setShowInput}
 		/>,
 		document.body
 	);

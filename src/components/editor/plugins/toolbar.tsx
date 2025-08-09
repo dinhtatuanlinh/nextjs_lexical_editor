@@ -34,9 +34,10 @@ import {
 	CiTextAlignLeft,
 	CiTextAlignRight,
 } from 'react-icons/ci';
-import { FaAlignCenter, FaAlignLeft, FaAlignRight } from 'react-icons/fa';
+import { MdFormatBold, MdFormatItalic, MdFormatUnderlined } from "react-icons/md";
+import { FaAlignCenter, FaAlignLeft, FaAlignRight, FaListOl, FaListUl } from 'react-icons/fa';
 import { HiLink, HiLinkSlash } from 'react-icons/hi2';
-import { LuRedo, LuUndo } from 'react-icons/lu';
+import { LuHeading, LuHeading1, LuHeading2, LuHeading3, LuRedo, LuUndo } from 'react-icons/lu';
 import {
 	PiHighlighterLight,
 	PiTextIndentThin,
@@ -48,6 +49,10 @@ import { ImageNodeClickContext } from '../lexicalEditor';
 import { $createImageNode, ImageNode } from '../nodes/imageNode';
 import { $createFlexRowNode } from '../nodes/flexRowNode';
 import { INSERT_STYLED_BLOCK_COMMAND } from '../commands/insertStyledBlock';
+import {
+	INSERT_UNORDERED_LIST_COMMAND,
+	INSERT_ORDERED_LIST_COMMAND,
+} from '@lexical/list';
 
 export default function ToolbarPlugin<
 	T extends { imageId: number; name: string; link: string; type: string },
@@ -321,9 +326,9 @@ export default function ToolbarPlugin<
 
 	const insertBlueBox = () => {
 		editor.dispatchCommand(INSERT_STYLED_BLOCK_COMMAND, {
-		  className: 'blue-box',        // choose anything
+			className: 'blue-box', // choose anything
 		});
-	  };
+	};
 
 	return (
 		<div className="flex flex-wrap gap-2 border-b p-2 bg-gray-100 sticky top-0 z-30">
@@ -362,7 +367,7 @@ export default function ToolbarPlugin<
 						isBold ? 'bg-blue-200' : 'hover:bg-gray-200'
 					} px-2 py-1 border rounded text-black font-semibold`}
 				>
-					B
+					<MdFormatBold />
 				</button>
 				<button
 					type="button"
@@ -373,7 +378,7 @@ export default function ToolbarPlugin<
 						isItalic ? 'bg-blue-200' : 'hover:bg-gray-200'
 					} px-2 py-1 border rounded text-black italic`}
 				>
-					I
+					<MdFormatItalic />
 				</button>
 				<button
 					type="button"
@@ -384,7 +389,7 @@ export default function ToolbarPlugin<
 						isUnderline ? 'bg-blue-200' : 'hover:bg-gray-200'
 					} px-2 py-1 border rounded text-black underline`}
 				>
-					U
+					<MdFormatUnderlined />
 				</button>
 				<button
 					type="button"
@@ -513,6 +518,32 @@ export default function ToolbarPlugin<
 					<PiTextIndentThin />
 				</button>
 			</div>
+			<div className="flex space-x-1 border-r pr-2">
+				<button
+					type="button"
+					onClick={() =>
+						editor.dispatchCommand(
+							INSERT_UNORDERED_LIST_COMMAND,
+							undefined
+						)
+					}
+					className="px-2 py-1 border rounded hover:bg-gray-200 text-black"
+				>
+					<FaListUl />
+				</button>
+				<button
+					type="button"
+					onClick={() =>
+						editor.dispatchCommand(
+							INSERT_ORDERED_LIST_COMMAND,
+							undefined
+						)
+					}
+					className="px-2 py-1 border rounded hover:bg-gray-200 text-black"
+				>
+					<FaListOl />
+				</button>
+			</div>
 
 			<div className="flex space-x-1 border-r pr-2">
 				<select
@@ -533,7 +564,7 @@ export default function ToolbarPlugin<
 				<button
 					type="button"
 					onClick={() => setShowInput((prev) => !prev)}
-					className="bg-gray-200 px-2 py-1 rounded text-sm hover:bg-gray-300"
+					className="px-2 py-1 rounded text-sm hover:bg-gray-200"
 				>
 					<HiLink />
 				</button>
@@ -549,7 +580,7 @@ export default function ToolbarPlugin<
 						<button
 							type="button"
 							onClick={handleInsertLink}
-							className="bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600"
+							className="px-2 py-1 rounded text-sm hover:bg-gray-200"
 						>
 							ok
 						</button>
@@ -558,7 +589,7 @@ export default function ToolbarPlugin<
 				<button
 					type="button"
 					onClick={handleRemoveLink}
-					className="bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600"
+					className="px-2 py-1 rounded text-sm hover:bg-gray-200"
 				>
 					<HiLinkSlash />
 				</button>
@@ -567,7 +598,7 @@ export default function ToolbarPlugin<
 				<button
 					type="button"
 					onClick={handleOpenImageManager}
-					className="px-2 py-1 border rounded hover:bg-gray-200 text-black flex items-center"
+					className="px-1 py-1 border rounded hover:bg-gray-200 text-black flex items-center"
 				>
 					<ImageIcon className="w-5 h-5" />
 				</button>
@@ -610,9 +641,9 @@ export default function ToolbarPlugin<
 					</button>
 				</div>
 			)}
-			<div className="flex space-x-1 border-r pr-2">
+			{/* <div className="flex space-x-1 border-r pr-2">
 				<button
-					className="bg-blue-500 text-white px-3 py-1 rounded mb-3"
+					className="bg-blue-500 text-white px-2 py-1 rounded"
 					onClick={() => {
 						editor.update(() => {
 							const flexRow = $createFlexRowNode();
@@ -628,7 +659,7 @@ export default function ToolbarPlugin<
 				>
 					Insert Flex Row Block
 				</button>
-			</div>
+			</div> */}
 			<div className="flex space-x-1 border-r pr-2">
 				<button onClick={insertBlueBox}>Blue Box</button>
 			</div>

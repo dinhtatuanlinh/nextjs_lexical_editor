@@ -25,7 +25,7 @@ function PanelEditor({ editor }: { editor: LexicalEditor }) {
 		<LexicalNestedComposer initialEditor={editor}>
 			<RichTextPlugin
 				contentEditable={
-					<ContentEditable className="min-h-[80px] p-2 border rounded" />
+					<ContentEditable className="min-h-[80px] p-2" />
 				}
 				placeholder={
 					<div className="text-gray-400">Edit content...</div>
@@ -67,21 +67,21 @@ export class FlexRowNode extends DecoratorNode<React.JSX.Element> {
 	}
 
 	decorate(): React.JSX.Element {
-		console.log("Decorating node:", this.getKey());
+		console.log('Decorating node:', this.getKey());
 		return <FlexRowComponent />;
 	}
 
 	createDOM(): HTMLElement {
 		const div = document.createElement('div');
 		return div;
-	  }
+	}
 
 	// ⚠ No createDOM() needed here!
 
 	exportJSON(): SerializedFlexRowNode {
 		return {
-		  type: 'flex-row',
-		  version: 1,
+			type: 'flex-row',
+			version: 1,
 		};
 	}
 	static importJSON(): FlexRowNode {

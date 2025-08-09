@@ -25,6 +25,9 @@ import { StyledBlockBehaviourPlugin } from './plugins/styledBlockBehaviourPlugin
 import { LexicalEditor as LexicalEditorInstance } from 'lexical';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import EditorRefPlugin from './plugins/EditorRefPlugin';
+import { ListPlugin } from '@lexical/react/LexicalListPlugin';
+import { ListNode, ListItemNode } from '@lexical/list';
+import PrintJSONPlugin from './plugins/PrintJSONPlugin';
 
 // Catch any errors that occur during Lexical updates and log them
 // or throw them as needed. If you don't throw them, Lexical will
@@ -68,7 +71,7 @@ function LexicalEditor<
 		onError: (e: any) => {
 			console.log('ERROR:', e);
 		},
-		nodes: [HeadingNode, ParagraphNode, LinkNode, ImageNode, FlexRowNode, StyledBlockNode],
+		nodes: [HeadingNode, ParagraphNode, LinkNode, ImageNode, FlexRowNode, StyledBlockNode, ListNode, ListItemNode],
 		editorState: initialContent,
 	};
 
@@ -115,12 +118,14 @@ function LexicalEditor<
 					<HistoryPlugin />
 					<OnChangePlugin onChange={handleEditorChange} />
 					<LinkPlugin />
+					<ListPlugin />
 					<ImagePlugin />
 					<AutoFocusPlugin />
 					<FloatingTextFormatToolbarPlugin />
 					<StyledBlockPlugin />
 					<StyledBlockBehaviourPlugin />
 					<EditorRefPlugin refObject={ref} />
+					{/* <PrintJSONPlugin /> */}
 				</LexicalComposer>
 			</ImageNodeClickContext.Provider>
 		</div>

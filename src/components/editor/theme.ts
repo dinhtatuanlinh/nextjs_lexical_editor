@@ -11,16 +11,11 @@ const theme = {
 		h5: 'editor-heading-h5',
 		h6: 'editor-heading-h6',
 	},
-	list: {
-		nested: {
-			listitem: 'editor-nested-listitem',
-		},
-		ol: 'editor-list-ol',
-		ul: 'editor-list-ul',
-		listitem: 'editor-listItem',
-		listitemChecked: 'editor-listItemChecked',
-		listitemUnchecked: 'editor-listItemUnchecked',
-	},
+    list: {
+        ul: 'list-disc pl-6',
+        ol: 'list-decimal pl-6',
+        listitem: 'ml-2',
+    },
 	hashtag: 'editor-hashtag',
 	image: 'editor-image',
 	link: 'editor-link',
